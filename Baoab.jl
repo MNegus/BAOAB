@@ -10,7 +10,7 @@ function __init__()
   global N = 1000 # Particle number
   global nbins = 1000 # Number of bins
   global δt = 0.15 # Timestep
-  global NO_TIMESTEPS = 10000 # Number of timesteps
+  global NO_TIMESTEPS = 100000 # Number of timesteps
   global M = 1 # Mass of particles
   global kT = 1 # Boltzmann constant * Temperature
 
@@ -22,6 +22,10 @@ function __init__()
   global bar_pos = [x_min + j * bin_width for j in [0:(nbins-1);]]
 
   global x_L = -2 # Position of left minimum
+
+  global dir_loc = "/home/michael/Documents/URSS 2017/Julia files/baob_limit/"
+
+  global filename = "particle_dist.csv"
 end
 
 export N, nbins, δt, NO_TIMESTEPS, M, kT, x_min, x_max, bin_width, bar_pos, x_L
@@ -53,7 +57,7 @@ function simulate()
   R_next = randn(N)
 
   df = convert(DataFrame, X)
-  CSV.write("/home/michael/Documents/URSS 2017/Julia files/baob_limit/particle_dist.csv", df)
+  CSV.write(string(dir_loc, filename), df)
 
 
   for m in [1:NO_TIMESTEPS;]
@@ -66,7 +70,7 @@ function simulate()
     R_next = randn(N)
     X = X_next
     df = convert(DataFrame, X)
-    CSV.write("/home/michael/Documents/URSS 2017/Julia files/baob_limit/particle_dist.csv", df, append=true)
+    CSV.write(string(dir_loc, filename), df, append=true)
   end
 end
 
