@@ -7,10 +7,10 @@ using CSV
 using Potentials
 
 function __init__()
-  global N = 1000 # Particle number
+  global N = 10 # Particle number
   global δt = 0.15 # Timestep
-  global NO_TIMESTEPS = 1500000 # Number of timesteps
-  global OUTPUT_FREQ = 1000 # Number of timesteps between each output
+  global NO_TIMESTEPS = 10 # Number of timesteps
+  global OUTPUT_FREQ = 1 # Number of timesteps between each output
   global M = 1 # Mass of particles
   global kT = 1 # Boltzmann constant * Temperature
 
@@ -19,9 +19,9 @@ function __init__()
 
   global x_L = -2 # Position of left minimum
 
-  global dir_loc = "/home/michael/Documents/URSS 2017/Julia files/baoab_limit/"
+  global dir_loc = pwd()
 
-  global filename = "output_1500000.csv"
+  global filename = "test.csv"
 end
 
 export N, δt, NO_TIMESTEPS, M, kT, x_min, x_max, x_L
@@ -31,6 +31,7 @@ function simulate(start_filename="")
     # Initial distribution of particles
     init_dist = Normal(x_L, 0.5)
     X = rand(init_dist, N)'
+    println(X)
   else
     init_df = CSV.read(string(dir_loc, start_filename))
     X = [get(init_df[nrow(init_df), p]) for p in 1:N]'
@@ -40,7 +41,7 @@ function simulate(start_filename="")
   R = randn(N)
   R_next = randn(N)
 
-  df = convert(DataFrame, X)
+  df = DataFrames.convert(DataFrame, X)
   CSV.write(string(dir_loc, filename), df)
 
   for m in [1:NO_TIMESTEPS;]
